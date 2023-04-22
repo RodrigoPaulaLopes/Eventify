@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { OrganizerCategory } from './OrganizerCategory.entity';
+import { OrganizerCategory } from './organizer_category.entity';
 
 @Module({
     imports: [TypeOrmModule.forFeature([OrganizerCategory])]
