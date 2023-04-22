@@ -1,4 +1,4 @@
-import { Event } from "src/event/event.entity";
+import { Event } from "src/event_module/event.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
