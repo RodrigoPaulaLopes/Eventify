@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { ConfigModule } from '@nestjs/config';
-import dotenv from "dotenv"
+import { UsersModule } from './users/users.module';
+import { User } from './users/users.entity';
+
 
 @Module({
   imports: [
@@ -13,9 +15,9 @@ import dotenv from "dotenv"
     username: process.env.DB_USER,
     password: process.env.PASSWORD,
     database: process.env.DATABASE,
-    entities: [],
+    entities: [User],
     synchronize: true,
-  })],
+  }), UsersModule],
   controllers: [],
   providers: [],
 })
