@@ -31,7 +31,7 @@ import { EventService } from './event_module/event.service';
     synchronize: true,
   }), UsersModule, OrganizerCategoryModule, OrganizerModule, OrganizerModule, EventCategoryModule, EventModule, TicketsModule, BuyTicketsModule],
   controllers: [],
-  providers: [EventService],
+  providers: [],
 })
 export class AppModule {
 
