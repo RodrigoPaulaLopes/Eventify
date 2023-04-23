@@ -12,11 +12,11 @@ export class OrganizerService {
       ) {}
     
       async findAll(): Promise<Organizer[]> {
-        return this.organizerRepository.find();
+        return this.organizerRepository.find({relations: ['organizerCategory']});
       }
     
       async findById(id: number): Promise<Organizer> {
-        return this.organizerRepository.findOne({where: {id:id}});
+        return this.organizerRepository.findOne({where: {id:id}, relations: ['organizerCategory']});
       }
     
       async create(organizer: Organizer): Promise<Organizer> {
@@ -25,7 +25,7 @@ export class OrganizerService {
     
       async update(id: number, organizer: Organizer): Promise<Organizer> {
         await this.organizerRepository.update(id, organizer);
-        return this.organizerRepository.findOne({where: {id:id}});
+        return this.organizerRepository.findOne({where: {id:id}, relations: ['organizerCategory']});
       }
     
       async delete(id: number): Promise<void> {

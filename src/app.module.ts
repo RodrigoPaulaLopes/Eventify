@@ -16,6 +16,7 @@ import { Ticket } from './entities/tickets/tickets.entity';
 import { BuyTicketsModule } from './modules/buy_tickets/buy_tickets/buy_tickets.module';
 import { BuyTickets } from './entities/buy_tickets/buy_tickets.entity';
 import { OrganizerCategoryController } from './controllers/organizer_category/organizer_category/organizer_category.controller';
+import { OrganizerController } from './controllers/organizer/organizer/organizer.controller';
 
 @Module({
   imports: [
