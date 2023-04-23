@@ -17,6 +17,7 @@ import { BuyTicketsModule } from './modules/buy_tickets/buy_tickets/buy_tickets.
 import { BuyTickets } from './entities/buy_tickets/buy_tickets.entity';
 
 
+
 @Module({
   imports: [
   ConfigModule.forRoot(), 
