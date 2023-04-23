@@ -1,5 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, OneToMany, JoinTable } from 'typeorm';
 import { Event } from '../event_module/event.entity';
+import { User } from 'src/users/users.entity';
+import { BuyTickets } from 'src/buy_tickets/buy_tickets.entity';
 
 @Entity()
 export class Ticket {
@@ -28,4 +31,11 @@ export class Ticket {
 
     @ManyToOne(() => Event, event => event.tickets)
     event: Event;
+
+    @ManyToMany(() => User, user => user.tickets)
+    @JoinTable()
+    users: User[];
+
+    @OneToMany(() => BuyTickets, buyTickets => buyTickets.ticket)
+    buyTickets: BuyTickets[];
 }

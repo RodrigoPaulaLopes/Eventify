@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { BuyTickets } from 'src/buy_tickets/buy_tickets.entity';
+import { Ticket } from 'src/tickets/tickets.entity';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 
 @Entity()
 export class User {
@@ -41,4 +43,11 @@ export class User {
     length: 255
   })
   address: string;
+
+  @ManyToMany(() => Ticket, ticket => ticket.users)
+  @JoinTable()
+  tickets: Ticket[];
+
+  @OneToMany(() => BuyTickets, buyTickets => buyTickets.user)
+  buyTickets: BuyTickets[];
 }

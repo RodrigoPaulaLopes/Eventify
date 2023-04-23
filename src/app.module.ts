@@ -13,7 +13,8 @@ import { Event } from './event_module/event.entity';
 import { EventCategory } from './event_category/event_category.entity';
 import { TicketsModule } from './tickets/tickets.module';
 import { Ticket } from './tickets/tickets.entity';
-
+import { BuyTicketsModule } from './buy_tickets/buy_tickets.module';
+import { BuyTickets } from './buy_tickets/buy_tickets.entity';
 
 @Module({
   imports: [
@@ -25,9 +26,9 @@ import { Ticket } from './tickets/tickets.entity';
     username: process.env.DB_USER,
     password: process.env.PASSWORD,
     database: process.env.DATABASE,
-    entities: [User, OrganizerCategory, Organizer, Event, EventCategory, Ticket],
+    entities: [User, OrganizerCategory, Organizer, Event, EventCategory, Ticket, BuyTickets],
     synchronize: true,
-  }), UsersModule, OrganizerCategoryModule, OrganizerModule, OrganizerModule, EventCategoryModule, EventModule, TicketsModule],
+  }), UsersModule, OrganizerCategoryModule, OrganizerModule, OrganizerModule, EventCategoryModule, EventModule, TicketsModule, BuyTicketsModule],
   controllers: [],
   providers: [],
 })
