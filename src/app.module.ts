@@ -15,6 +15,7 @@ import { TicketsModule } from './tickets/tickets.module';
 import { Ticket } from './tickets/tickets.entity';
 import { BuyTicketsModule } from './buy_tickets/buy_tickets.module';
 import { BuyTickets } from './buy_tickets/buy_tickets.entity';
+import { EventService } from './event_module/event.service';
 
 @Module({
   imports: [
@@ -30,7 +31,7 @@ import { BuyTickets } from './buy_tickets/buy_tickets.entity';
     synchronize: true,
   }), UsersModule, OrganizerCategoryModule, OrganizerModule, OrganizerModule, EventCategoryModule, EventModule, TicketsModule, BuyTicketsModule],
   controllers: [],
-  providers: [],
+  providers: [EventService],
 })
 export class AppModule {
 
