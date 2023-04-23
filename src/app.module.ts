@@ -1,21 +1,21 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { ConfigModule } from '@nestjs/config';
-import { UsersModule } from './users/users.module';
-import { User } from './users/users.entity';
-import { OrganizerCategoryModule } from './organizer_category/organizer_category.module';
-import { OrganizerCategory } from './organizer_category/organizer_category.entity';
-import { OrganizerModule } from './organizer/organizer.module';
-import { Organizer } from './organizer/Organizer.entity';
-import { EventCategoryModule } from './event_category/event_category.module';
-import { EventModule } from './event_module/event.module';
-import { Event } from './event_module/event.entity';
-import { EventCategory } from './event_category/event_category.entity';
-import { TicketsModule } from './tickets/tickets.module';
-import { Ticket } from './tickets/tickets.entity';
-import { BuyTicketsModule } from './buy_tickets/buy_tickets.module';
-import { BuyTickets } from './buy_tickets/buy_tickets.entity';
-import { EventService } from './event_module/event.service';
+import { UsersModule } from './modules/users/users.module';
+import { User } from './entities/users/users.entity';
+import { OrganizerCategoryModule } from './modules/organizer_category/organizer_category/organizer_category.module';
+import { OrganizerCategory } from './entities/organizer_category/organizer_category.entity';
+import { OrganizerModule } from './modules/organizer/organizer/organizer.module';
+import { Organizer } from './entities/organizer/organizer.entity';
+import { EventCategoryModule } from './modules/event_category/event_category/event_category.module';
+import { EventModule } from './modules/event/event_module/event.module';
+import { Event } from './entities/event/event.entity';
+import { EventCategory } from './entities/event_category/event_category.entity';
+import { TicketsModule } from './modules/tickets/tickets/tickets.module';
+import { Ticket } from './entities/tickets/tickets.entity';
+import { BuyTicketsModule } from './modules/buy_tickets/buy_tickets/buy_tickets.module';
+import { BuyTickets } from './entities/buy_tickets/buy_tickets.entity';
+import { OrganizerCategoryController } from './controllers/organizer_category/organizer_category/organizer_category.controller';
 
 @Module({
   imports: [
