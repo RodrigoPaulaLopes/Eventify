@@ -14,13 +14,10 @@ export class Ticket {
     })
     barcode: string;
 
-    @Column({
-        nullable: false
-    })
-    purchaseDate: Date;
 
     @Column({
-        nullable: false
+        nullable: false,
+        type: 'decimal', precision: 10, scale: 2 
     })
     value: number;
 
