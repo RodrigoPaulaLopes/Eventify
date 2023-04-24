@@ -30,7 +30,7 @@ export class EventCategoryController {
     }
   
     @Delete(':id')
-    async delete(@Param('id') id: number): Promise<void> {
+    async delete(@Param('id') id: number): Promise<EventCategory> {
       return this.eventCategoryService.delete(id);
     }
 }

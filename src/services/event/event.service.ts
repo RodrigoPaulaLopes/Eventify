@@ -10,23 +10,71 @@ export class EventService {
     private eventRepository: Repository<Event>) { }
 
     async findAll(): Promise<Event[]> {
-        return this.eventRepository.find({ relations: ['eventCategory'] });
+        try {
+            const events = await this.eventRepository.find({ relations: ['eventCategory'] });
+
+            if(!events){
+                throw new Error('events are empty')
+            }
+            return events
+        } catch (error) {
+            throw new Error(error.message);
+            
+        }
     }
 
     async findById(id: number): Promise<Event> {
-        return this.eventRepository.findOne({ where: { id: id }, relations: ['eventCategory'] } );
+        
+        try {
+            const event = await this.eventRepository.findOne({ where: { id: id }, relations: ['eventCategory'] } );
+
+            if(!event){
+                throw new Error('events are empty')
+            }
+            return event
+        } catch (error) {
+            throw new Error(error.message);
+            
+        }
     }
 
     async create(event: Event): Promise<Event> {
-        return this.eventRepository.save(event);
+
+        try {
+            const eventCreated = await this.eventRepository.save(event);
+
+            return eventCreated
+            
+        } catch (error) {
+            throw new Error(error.message);
+        }
     }
 
     async update(id: number, event: Event): Promise<Event> {
-        await this.eventRepository.update(id, event);
-        return this.eventRepository.findOne({ where: { id: id }, relations: ['eventCategory'] } );
+
+        try {
+            const eventUpdated = await this.eventRepository.update(id, event);
+            return this.eventRepository.findOne({ where: { id: id }, relations: ['eventCategory'] } );
+        } catch (error) {
+            throw new Error(error.message);
+        }
+        
     }
 
-    async delete(id: number): Promise<void> {
-        await this.eventRepository.delete(id);
+    async delete(id: number): Promise<Event> {
+        try {
+            const event = await this.eventRepository.findOne({ where: { id: id }, relations: ['eventCategory'] } );
+
+            if(!event){
+                throw new Error("Event not found");
+                
+            }
+            const eventRemoved = await this.eventRepository.remove(event);
+
+            return eventRemoved;
+        } catch (error) {
+            throw new Error(error.message);
+        }
+       
     }
 }

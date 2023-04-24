@@ -27,7 +27,7 @@ export class OrganizerController {
     }
 
     @Delete(':id')
-    delete(@Param('id') id: number): Promise<void> {
+    delete(@Param('id') id: number): Promise<Organizer> {
         return this.organizerService.delete(id);
     }
 }

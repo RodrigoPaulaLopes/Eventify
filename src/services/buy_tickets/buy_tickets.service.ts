@@ -14,17 +14,54 @@ export class BuyTicketsService {
   ) { }
 
   async findAll(): Promise<BuyTickets[]> {
-    return this.buyTicketsRepository.find({ relations: ['user', 'ticket'] });
+    try {
+      const buy_tickets  = await this.buyTicketsRepository.find({ relations: ['user', 'ticket'] });
+
+      if(!buy_tickets){
+        throw new Error('buy tickets is empty')
+      }
+
+      return buy_tickets
+      
+    } catch (error) {
+      throw new Error(error.message)
+    }
   }
 
   async findById(id: number): Promise<BuyTickets> {
-    return this.buyTicketsRepository.findOne({ where: { id: id }, relations: ['user', 'ticket'] });
+    try {
+      const buy_ticket  = await this.buyTicketsRepository.findOne({ where: { id: id }, relations: ['user', 'ticket'] });
+      if(!buy_ticket){
+        throw new Error('buy ticket not found!');
+      }
+      return buy_ticket
+    } catch (error) {
+      throw new Error(error.message)
+    }
   }
   async findByUserId(id: number): Promise<BuyTickets[]> {
-    return this.buyTicketsRepository.find({ where: { user: { id: id } }, relations: ['user', 'ticket'] });
+    try {
+      const buy_ticket  = await this.buyTicketsRepository.find({ where: { user: { id: id } }, relations: ['user', 'ticket'] });
+      if(!buy_ticket){
+        throw new Error('buy ticket not found!');
+      }
+      return buy_ticket
+      
+    } catch (error) {
+      throw new Error(error.message)
+    }
   }
   async findByTicketId(id: number): Promise<BuyTickets[]> {
-    return this.buyTicketsRepository.find({ where: { ticket: { id: id } }, relations: ['user', 'ticket'] });
+    try {
+      const buy_ticket  = await this.buyTicketsRepository.find({ where: { ticket: { id: id } }, relations: ['user', 'ticket'] });
+  
+      if(!buy_ticket){
+        throw new Error('buy ticket not found!');
+      }
+      return buy_ticket
+    } catch (error) {
+      throw new Error(error.message)
+    }
   }
 
   async buyTickets(buyTickets: BuyTickets): Promise<BuyTickets> {
@@ -63,14 +100,14 @@ export class BuyTicketsService {
       const purchase = await this.buyTicketsRepository.findOne({ where: { id: id }, relations: ['ticket'] })
   
       if (!purchase) {
-        return { error: 'Purchase not found' }
+       throw new Error('Purchase not found')
       }
   
       const idTicket = purchase.ticket.id
       const tickets = await this.ticketsRepository.findOne({ where: { id: idTicket } })
   
       if (!tickets) {
-        return { error: 'Ticket not found' }
+        throw new Error('Ticket not found')
       }
   
       const new_tickets = { ...tickets, quantity: tickets.quantity + purchase.quantity }
@@ -85,7 +122,19 @@ export class BuyTicketsService {
     }
   }
 
-  async delete(id: number): Promise<void> {
-    await this.buyTicketsRepository.delete(id);
+  async delete(id: number): Promise<BuyTickets> {
+    try {
+      const buy_ticket = await this.buyTicketsRepository.findOne({where: {id: id}})
+      if(!buy_ticket){
+        throw new Error("buy ticket not found");
+        
+      }
+      const removed = await this.buyTicketsRepository.remove(buy_ticket);
+      return removed
+    } catch (error) {
+      throw new Error(error.message);
+      
+    }
+  
   }
 }
