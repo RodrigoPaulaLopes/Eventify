@@ -6,49 +6,49 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMan
 export class User {
 
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column({
     nullable: false,
     length: 50 
   })
-  name: string;
+  name?: string;
 
   @Column({
     nullable: false,
     length: 100,
     unique: true
   })
-  email: string;
+  email?: string;
 
   @Column({
     nullable: false,
     length: 255
   })
-  password: string;
+  password?: string;
 
   @Column({
     nullable: false,
     length: 11
   })
-  cpf: string;
+  cpf?: string;
 
   @Column({
     nullable: false,
     length: 20
   })
-  phone: string;
+  phone?: string;
 
   @Column({
     nullable: false,
     length: 255
   })
-  address: string;
+  address?: string;
 
   @ManyToMany(() => Ticket, ticket => ticket.users)
   @JoinTable()
-  tickets: Ticket[];
+  tickets?: Ticket[];
 
   @OneToMany(() => BuyTickets, buyTickets => buyTickets.user)
-  buyTickets: BuyTickets[];
+  buyTickets?: BuyTickets[];
 }

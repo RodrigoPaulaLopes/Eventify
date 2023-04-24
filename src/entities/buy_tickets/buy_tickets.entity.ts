@@ -7,7 +7,7 @@ import { Ticket } from 'src/entities/tickets/tickets.entity';
 export class BuyTickets {
 
     @PrimaryGeneratedColumn({ unsigned: true })
-    id: number;
+    id?: number;
 
     @Column({
         nullable: false

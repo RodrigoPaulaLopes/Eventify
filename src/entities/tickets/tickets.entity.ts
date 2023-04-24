@@ -7,32 +7,32 @@ import { BuyTickets } from 'src/entities/buy_tickets/buy_tickets.entity';
 @Entity()
 export class Ticket {
     @PrimaryGeneratedColumn()
-    id: number;
+    id?: number;
 
     @Column({
         nullable: false
     })
-    barcode: string;
+    barcode?: string;
 
 
     @Column({
         nullable: false,
         type: 'decimal', precision: 10, scale: 2 
     })
-    value: number;
+    value?: number;
 
     @Column({
         nullable: false
     })
-    quantity: number;
+    quantity?: number;
 
     @ManyToOne(() => Event, event => event.tickets)
-    event: Event;
+    event?: Event;
 
     @ManyToMany(() => User, user => user.tickets)
     @JoinTable()
-    users: User[];
+    users?: User[];
 
     @OneToMany(() => BuyTickets, buyTickets => buyTickets.ticket)
-    buyTickets: BuyTickets[];
+    buyTickets?: BuyTickets[];
 }
