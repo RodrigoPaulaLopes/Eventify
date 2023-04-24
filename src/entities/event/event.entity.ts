@@ -35,6 +35,6 @@ export class Event {
   })
   description: string;
 
-  @OneToMany(() => Ticket, tickets => tickets.event)
+  @OneToMany(() => Ticket, tickets => tickets.event, { cascade: true })
   tickets: Ticket[]
 }

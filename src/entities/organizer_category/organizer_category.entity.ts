@@ -15,6 +15,6 @@ export class OrganizerCategory{
     })
     name: string
 
-    @OneToMany(() => Organizer, organizer => organizer.organizerCategory)
+    @OneToMany(() => Organizer, organizer => organizer.organizerCategory, { cascade: true })
     organizer: Organizer[]
 }

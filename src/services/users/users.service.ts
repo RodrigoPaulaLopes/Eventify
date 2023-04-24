@@ -2,7 +2,9 @@ import { Injectable, InternalServerErrorException, NotFoundException, Unauthoriz
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 import { User } from '../../entities/users/users.entity';
-import  { hashPassword, comparePass } from 'src/helpers/passwordHelper.helper';
+import { hashPassword, comparePass } from 'src/helpers/passwordHelper.helper';
+import { JwtService } from '@nestjs/jwt';
+import { jwtConstants } from 'src/helpers/jwtConstants.helper';
 
 
 @Injectable()
@@ -13,9 +15,9 @@ export class UsersService {
   ) { }
 
   async findAll(): Promise<User[]> {
-    const users  = await this.userRepository.find();
+    const users = await this.userRepository.find();
 
-    if(!users){
+    if (!users) {
       throw new NotFoundException('users not found')
     }
 
@@ -23,9 +25,9 @@ export class UsersService {
   }
 
   async findById(id: number): Promise<User> {
-    const user  = await this.userRepository.findOne({ where: { id: id } });
+    const user = await this.userRepository.findOne({ where: { id: id } });
 
-    if(!user){
+    if (!user) {
       throw new NotFoundException('user not found.')
     }
     return user;
@@ -35,56 +37,60 @@ export class UsersService {
     try {
       const password = await hashPassword(user.password)
       const saved = await this.userRepository.save({ ...user, password: password });
-  
+
       return saved
     } catch (error) {
-        throw new InternalServerErrorException('error creating user');
+      throw new InternalServerErrorException('error creating user');
     }
-   
+
   }
 
   async update(id: number, user: User): Promise<User> {
     try {
       const password = await hashPassword(user.password)
       const updated = await this.userRepository.update(id, { ...user, password: password });
-      if(updated.affected == 0){
+      if (updated.affected == 0) {
         throw new InternalServerErrorException('error updating user')
       }
       return await this.userRepository.findOne({ where: { id: id } });
-      
+
     } catch (error) {
       throw new InternalServerErrorException('error updating user')
     }
-   
+
   }
 
   async delete(id: number): Promise<User> {
     try {
 
-      const user  = await this.userRepository.findOne({ where: { id: id } });
+      const user = await this.userRepository.findOne({ where: { id: id } });
 
-      if(!user){
+      if (!user) {
         throw new InternalServerErrorException('user not found')
       }
-      const deleted  = await this.userRepository.remove(user)
+      const deleted = await this.userRepository.remove(user)
       return deleted
     } catch (error) {
       throw new InternalServerErrorException('error deleting user')
     }
   }
 
-  async login(email: string, password: string): Promise<User> {
+  async login(email: string, password: string): Promise<any> {
     const user = await this.userRepository.findOne({ where: { email: email } });
+
     if (!user) {
       throw new NotFoundException('User or password incorrect.');
-    }else{
+    } else {
       const isPasswordMatch = await comparePass(password, user.password) // Compara a senha fornecida com o hash armazenado no banco de dados
       if (!isPasswordMatch) {
         throw new UnauthorizedException('User or password incorrect.');
       }
-      return user;
+      const jwtService: JwtService = new JwtService()
+      const payload = { login: user.email, sub: user.id }
+      const token = await jwtService.signAsync(payload, { secret: jwtConstants.secret, expiresIn: '5h' })
+      return {'Token': token}
     }
-    
+
   }
 
 }

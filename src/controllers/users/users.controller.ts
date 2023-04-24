@@ -1,7 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { UsersService } from '../../services/users/users.service';
 import { User } from '../../entities/users/users.entity';
-import { DeleteResult, UpdateResult } from 'typeorm';
 
 @Controller('users')
 export class UsersController {
@@ -34,7 +33,7 @@ export class UsersController {
     }
   
     @Post('login')
-    login(@Body() { email, password }: { email: string; password: string }): Promise<User> {
+    login(@Body() { email, password }: { email: string; password: string }): Promise<String> {
       return this.userService.login(email, password);
     }
 }

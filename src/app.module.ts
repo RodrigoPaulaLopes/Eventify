@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { TypeOrmModule } from "@nestjs/typeorm"
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './modules/users/users.module';
@@ -15,24 +15,36 @@ import { TicketsModule } from './modules/tickets/tickets/tickets.module';
 import { Ticket } from './entities/tickets/tickets.entity';
 import { BuyTicketsModule } from './modules/buy_tickets/buy_tickets/buy_tickets.module';
 import { BuyTickets } from './entities/buy_tickets/buy_tickets.entity';
+import { AuthMiddleware } from './middlewares/auth/auth.middleware';
+import { JwtModule } from '@nestjs/jwt';
+import { jwtConstants } from './helpers/jwtConstants.helper';
 
 
 @Module({
   imports: [
-  ConfigModule.forRoot(), 
-  TypeOrmModule.forRoot({
-    type: 'mysql',
-    host: process.env.HOST,
-    port: Number(process.env.PORT),
-    username: process.env.DB_USER,
-    password: process.env.PASSWORD,
-    database: process.env.DATABASE,
-    entities: [User, OrganizerCategory, Organizer, Event, EventCategory, Ticket, BuyTickets],
-    synchronize: true,
-  }), UsersModule, OrganizerCategoryModule, OrganizerModule, OrganizerModule, EventCategoryModule, EventModule, TicketsModule, BuyTicketsModule],
+    ConfigModule.forRoot(),
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: process.env.HOST,
+      port: Number(process.env.PORT),
+      username: process.env.DB_USER,
+      password: process.env.PASSWORD,
+      database: process.env.DATABASE,
+      entities: [User, OrganizerCategory, Organizer, Event, EventCategory, Ticket, BuyTickets],
+      synchronize: true,
+    }),
+    JwtModule.register({
+      secret: jwtConstants.secret,
+      signOptions: { expiresIn: '5h' },
+    }), UsersModule, OrganizerCategoryModule, OrganizerModule, OrganizerModule, EventCategoryModule, EventModule, TicketsModule, BuyTicketsModule],
   controllers: [],
   providers: [],
 })
 export class AppModule {
-
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthMiddleware)
+      .exclude({ path: 'users', method: RequestMethod.POST}, {path: 'users/login', method: RequestMethod.POST})
+      .forRoutes("*")
+  }
 }

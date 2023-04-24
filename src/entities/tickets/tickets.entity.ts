@@ -33,6 +33,6 @@ export class Ticket {
     @JoinTable()
     users?: User[];
 
-    @OneToMany(() => BuyTickets, buyTickets => buyTickets.ticket)
+    @OneToMany(() => BuyTickets, buyTickets => buyTickets.ticket, { cascade: true })
     buyTickets?: BuyTickets[];
 }

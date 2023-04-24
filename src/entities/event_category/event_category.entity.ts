@@ -12,6 +12,6 @@ export class EventCategory{
     })
     name: string
 
-    @OneToMany(() => Event, ev => ev.eventCategory)
+    @OneToMany(() => Event, ev => ev.eventCategory, { cascade: true })
     events: Event[]
 }
