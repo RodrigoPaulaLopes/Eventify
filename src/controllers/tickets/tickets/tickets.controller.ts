@@ -27,7 +27,7 @@ export class TicketsController {
     }
 
     @Delete(':id')
-    delete(@Param('id') id: number): Promise<void> {
+    delete(@Param('id') id: number): Promise<Ticket> {
         return this.ticketService.delete(id);
     }
 }
