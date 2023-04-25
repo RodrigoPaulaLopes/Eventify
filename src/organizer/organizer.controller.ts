@@ -1,7 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { Organizer } from 'src/organizer/entities/organizer.entity';
 import { OrganizerService } from './organizer.service';
-
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('organizer')
 @Controller('organizer')
 export class OrganizerController {
     constructor(private readonly organizerService: OrganizerService) { }

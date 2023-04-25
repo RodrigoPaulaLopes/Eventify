@@ -1,7 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { BuyTickets } from 'src/buy_tickets/entities/buy_tickets.entity';
 import { BuyTicketsService } from 'src/buy_tickets/buy_tickets.service';
-
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('buy_tickets')
 @Controller('buy-tickets')
 export class BuyTicketsController {
     constructor(private readonly buyTicketsService: BuyTicketsService) {}

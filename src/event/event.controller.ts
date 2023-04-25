@@ -1,7 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { EventService } from './event.service';
 import { Event } from 'src/event/entities/event.entity';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('event')
 @Controller('event')
 export class EventController {
 
