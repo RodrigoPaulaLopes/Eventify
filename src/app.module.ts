@@ -26,12 +26,13 @@ import { jwtConstants } from './helpers/jwtConstants.helper';
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.HOST,
-      port: Number(process.env.PORT),
+      port: Number(process.env.PORT_DB),
       username: process.env.DB_USER,
       password: process.env.PASSWORD,
       database: process.env.DATABASE,
       entities: [User, OrganizerCategory, Organizer, Event, EventCategory, Ticket, BuyTickets],
       synchronize: true,
+      connectTimeout: 60000
     }),
     JwtModule.register({
       secret: jwtConstants.secret,

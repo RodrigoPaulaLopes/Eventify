@@ -1,0 +1,11 @@
+HOST=db
+PORT_DB=3307
+DB_USER=root
+PASSWORD=root
+DATABASE=eventify
+
+# auth Token
+SECRET=SECRET
+
+# APPLICATION
+PORT=3001

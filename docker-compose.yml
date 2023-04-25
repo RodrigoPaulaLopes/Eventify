@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  db:
+    container_name: eventify_db
+    restart: unless-stopped
+    image: mysql:latest
+    networks:
+      - app-network
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: eventify
+    ports:
+      - '3307:3306'
+    volumes:
+      - dbdata:/var/lib/mysql
+  app:
+    container_name: app_eventify
+    networks:
+      - app-network
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3001:3000'
+    depends_on:
+      - db
+ 
+networks:
+  app-network:
+volumes:
+  dbdata:
