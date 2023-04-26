@@ -11,7 +11,7 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: eventify
     ports:
-      - '3307:3306'
+      - '3307:${PORT_DB}'
     volumes:
       - dbdata:/var/lib/mysql
   app:
@@ -22,7 +22,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - '3001:3000'
+      - '3001:${PORT}'
     depends_on:
       - db
  
