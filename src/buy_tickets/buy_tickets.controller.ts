@@ -1,7 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { BuyTickets } from 'src/buy_tickets/entities/buy_tickets.entity';
 import { BuyTicketsService } from 'src/buy_tickets/buy_tickets.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { CreateBuyTicketDto } from './dto/create-buy_ticket.dto';
+@ApiBearerAuth()
 @ApiTags('buy_tickets')
 @Controller('buy-tickets')
 export class BuyTicketsController {
@@ -26,7 +28,7 @@ export class BuyTicketsController {
     }
   
     @Post()
-    buyTickets(@Body() buyTickets: BuyTickets) {
+    buyTickets(@Body() buyTickets: CreateBuyTicketDto) {
       return this.buyTicketsService.buyTickets(buyTickets);
     }
     @Put(':id')

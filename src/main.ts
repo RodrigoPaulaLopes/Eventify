@@ -5,10 +5,11 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
 
-  const config = new DocumentBuilder()
+  const config = new DocumentBuilder().addBearerAuth()
     .setTitle('Eventify')
     .setDescription('api for purchasing event tickets')
     .setVersion('1.0')
+    .addTag('Authenticate')
     .addTag('users')
     .addTag('organizer')
     .addTag('organizer_category')

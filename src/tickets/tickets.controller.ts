@@ -1,7 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { Ticket } from 'src/tickets/entities/tickets.entity';
 import { TicketsService } from '../tickets/tickets.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { CreateTicketDto } from './dto/create-ticket.dto';
+@ApiBearerAuth()
 @ApiTags('tickets')
 @Controller('tickets')
 export class TicketsController {
@@ -18,12 +20,12 @@ export class TicketsController {
     }
 
     @Post()
-    create(@Body() ticket: Ticket): Promise<Ticket> {
+    create(@Body() ticket: CreateTicketDto): Promise<Ticket> {
         return this.ticketService.create(ticket);
     }
 
     @Put(':id')
-    update(@Param('id') id: number, @Body() ticket: Ticket): Promise<Ticket> {
+    update(@Param('id') id: number, @Body() ticket: CreateTicketDto): Promise<Ticket> {
         return this.ticketService.update(id, ticket);
     }
 

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Ticket } from './entities/tickets.entity';
 import { Repository } from 'typeorm';
+import { CreateTicketDto } from './dto/create-ticket.dto';
 
 @Injectable()
 export class TicketsService {
@@ -30,7 +31,7 @@ export class TicketsService {
     }
   }
 
-  async create(ticket: Ticket): Promise<Ticket> {
+  async create(ticket: CreateTicketDto): Promise<Ticket> {
     try {
       return await this.ticketRepository.save(ticket);
     } catch (error) {
@@ -38,7 +39,7 @@ export class TicketsService {
     }
   }
 
-  async update(id: number, ticket: Ticket): Promise<Ticket> {
+  async update(id: number, ticket: CreateTicketDto): Promise<Ticket> {
     try {
       await this.ticketRepository.update(id, ticket);
       const updatedTicket = await this.ticketRepository.findOne({ where: { id: id }, relations: ['event'] });

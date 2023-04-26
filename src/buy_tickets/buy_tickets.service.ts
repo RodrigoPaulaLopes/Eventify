@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BuyTickets } from './entities/buy_tickets.entity';
 import { Repository } from 'typeorm';
 import { Ticket } from 'src/tickets/entities/tickets.entity';
+import { CreateBuyTicketDto } from './dto/create-buy_ticket.dto';
 
 @Injectable()
 export class BuyTicketsService {
@@ -64,7 +65,7 @@ export class BuyTicketsService {
     }
   }
 
-  async buyTickets(buyTickets: BuyTickets): Promise<BuyTickets> {
+  async buyTickets(buyTickets: CreateBuyTicketDto): Promise<BuyTickets> {
     try {
       const idTicket: number = buyTickets.ticket.id;
       const tickets = await this.ticketsRepository.findOne({ where: { id: idTicket } });
@@ -80,14 +81,15 @@ export class BuyTicketsService {
         throw new Error("Quantity of tickets must be greater than zero");
       }
   
-      const new_tickets = { ...tickets, quantity: tickets.quantity - buyTickets.quantity };
-      const updated = await this.ticketsRepository.update(idTicket, new_tickets);
+      tickets.quantity -= buyTickets.quantity; // Atualiza a quantidade de tickets no objeto original
+  
+      const updated = await this.ticketsRepository.update(idTicket, tickets);
   
       if(updated.affected !== 1){ 
         throw new Error("Failed to update ticket quantity");
       }
   
-      const new_buy_tickets: BuyTickets = {...buyTickets, buyDate: new Date(), amount: buyTickets.quantity * tickets.value};
+      const new_buy_tickets: CreateBuyTicketDto = {...buyTickets, buyDate: new Date(), amount: buyTickets.quantity * tickets.value};
       const buy_tickets = await this.buyTicketsRepository.save(new_buy_tickets);
   
       return buy_tickets;
@@ -95,6 +97,7 @@ export class BuyTicketsService {
       throw new Error(error.message);
     }
   }
+  
   async cancelPurchase(id: number): Promise<any> {
     try {
       const purchase = await this.buyTicketsRepository.findOne({ where: { id: id }, relations: ['ticket'] })

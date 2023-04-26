@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EventCategory } from './entities/event_category.entity';
 import { Repository } from 'typeorm';
+import { CreateEventCategoryDto } from './dto/create-event_category.dto';
 
 @Injectable()
 export class EventCategoryService {
@@ -33,7 +34,7 @@ export class EventCategoryService {
         }
     }
 
-    async create(eventCategory: EventCategory): Promise<EventCategory> {
+    async create(eventCategory: CreateEventCategoryDto): Promise<EventCategory> {
         try {
             const eventSaved = await this.eventCategoryRepository.save(eventCategory);
 
@@ -43,7 +44,7 @@ export class EventCategoryService {
         }
     }
 
-    async update(id: number, eventCategory: EventCategory): Promise<EventCategory> {
+    async update(id: number, eventCategory: CreateEventCategoryDto): Promise<EventCategory> {
         try {
             await this.eventCategoryRepository.update(id, eventCategory);
 

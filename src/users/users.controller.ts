@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Put, Delete, Body, Param } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './entities/users.entity'
-import { ApiTags } from '@nestjs/swagger';
-
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { CreateUserDto } from './dto/create-user.dto';
+@ApiBearerAuth()
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
@@ -19,13 +20,8 @@ export class UsersController {
       return this.userService.findById(id);
     }
   
-    @Post()
-    create(@Body() user: User): Promise<User> {
-      return this.userService.create(user);
-    }
-  
     @Put(':id')
-    update(@Param('id') id: number, @Body() user: User): Promise<User> {
+    update(@Param('id') id: number, @Body() user: CreateUserDto): Promise<User> {
       return this.userService.update(id, user);
     }
   
@@ -34,8 +30,9 @@ export class UsersController {
       return this.userService.delete(id);
     }
   
-    @Post('login')
-    login(@Body() { email, password }: { email: string; password: string }): Promise<String> {
-      return this.userService.login(email, password);
-    }
+    
 }
+function AuthGuard(): Function | import("@nestjs/common").CanActivate {
+  throw new Error('Function not implemented.');
+}
+

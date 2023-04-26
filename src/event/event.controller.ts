@@ -1,8 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { EventService } from './event.service';
 import { Event } from 'src/event/entities/event.entity';
-import { ApiTags } from '@nestjs/swagger';
-
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { CreateEventDto } from './dto/create-event.dto';
+@ApiBearerAuth()
 @ApiTags('event')
 @Controller('event')
 export class EventController {
@@ -20,12 +21,12 @@ export class EventController {
     }
 
     @Post()
-    create(@Body() event: Event): Promise<Event> {
+    create(@Body() event: CreateEventDto): Promise<Event> {
         return this.eventService.create(event);
     }
 
     @Put(':id')
-    update(@Param('id') id: number, @Body() event: Event): Promise<Event> {
+    update(@Param('id') id: number, @Body() event: CreateEventDto): Promise<Event> {
         return this.eventService.update(id, event);
     }
 

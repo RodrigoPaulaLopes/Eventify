@@ -1,7 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { EventCategory } from 'src/event_category/entities/event_category.entity';
 import { EventCategoryService } from './event_category.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { CreateEventCategoryDto } from './dto/create-event_category.dto';
+@ApiBearerAuth()
 @ApiTags('event_category')
 @Controller('event-category')
 export class EventCategoryController {
@@ -18,14 +20,14 @@ export class EventCategoryController {
     }
   
     @Post()
-    async create(@Body() eventCategory: EventCategory): Promise<EventCategory> {
+    async create(@Body() eventCategory: CreateEventCategoryDto): Promise<EventCategory> {
       return this.eventCategoryService.create(eventCategory);
     }
   
     @Put(':id')
     async update(
       @Param('id') id: number,
-      @Body() eventCategory: EventCategory,
+      @Body() eventCategory: CreateEventCategoryDto,
     ): Promise<EventCategory> {
       return this.eventCategoryService.update(id, eventCategory);
     }

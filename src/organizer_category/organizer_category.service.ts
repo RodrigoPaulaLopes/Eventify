@@ -2,6 +2,7 @@ import { Injectable, InternalServerErrorException, NotFoundException } from '@ne
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { OrganizerCategory } from './entities/organizer_category.entity';
+import { CreateOrganizerCategoryDto } from './dto/create-organizer_category.dto';
 
 @Injectable()
 export class OrganizerCategoryService {
@@ -38,7 +39,7 @@ export class OrganizerCategoryService {
         }
     }
 
-    async create(organizerCategory: OrganizerCategory): Promise<OrganizerCategory> {
+    async create(organizerCategory: CreateOrganizerCategoryDto): Promise<OrganizerCategory> {
         try {
             
             const saved = await this.organizerCategoryRepository.save(organizerCategory);
@@ -49,7 +50,7 @@ export class OrganizerCategoryService {
         }
     }
 
-    async update(id: number, organizerCategory: OrganizerCategory): Promise<OrganizerCategory> {
+    async update(id: number, organizerCategory: CreateOrganizerCategoryDto): Promise<OrganizerCategory> {
 
         try {
             const updated = await this.organizerCategoryRepository.update(id, organizerCategory);

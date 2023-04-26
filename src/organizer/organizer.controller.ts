@@ -1,7 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { Organizer } from 'src/organizer/entities/organizer.entity';
 import { OrganizerService } from './organizer.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { CreateOrganizerDto } from './dto/create-organizer.dto';
+@ApiBearerAuth()
 @ApiTags('organizer')
 @Controller('organizer')
 export class OrganizerController {
@@ -18,12 +20,12 @@ export class OrganizerController {
     }
 
     @Post()
-    create(@Body() organizer: Organizer): Promise<Organizer> {
+    create(@Body() organizer: CreateOrganizerDto): Promise<Organizer> {
         return this.organizerService.create(organizer);
     }
 
     @Put(':id')
-    update(@Param('id') id: number, @Body() organizer: Organizer): Promise<Organizer> {
+    update(@Param('id') id: number, @Body() organizer: CreateOrganizerDto): Promise<Organizer> {
         return this.organizerService.update(id, organizer);
     }
 

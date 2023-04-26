@@ -1,7 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { OrganizerCategory } from 'src/organizer_category/entities/organizer_category.entity';
 import { OrganizerCategoryService } from 'src/organizer_category/organizer_category.service';
+import { CreateOrganizerCategoryDto } from './dto/create-organizer_category.dto';
+@ApiBearerAuth()
 @ApiTags('organizer_category')
 @Controller('organizer-category')
 export class OrganizerCategoryController {
@@ -18,12 +20,12 @@ export class OrganizerCategoryController {
     }
 
     @Post()
-    create(@Body() organizerCategory: OrganizerCategory): Promise<OrganizerCategory> {
+    create(@Body() organizerCategory: CreateOrganizerCategoryDto): Promise<OrganizerCategory> {
         return this.organizerCategoryService.create(organizerCategory);
     }
 
     @Put(':id')
-    update(@Param('id') id: number, @Body() organizerCategory: OrganizerCategory): Promise<OrganizerCategory> {
+    update(@Param('id') id: number, @Body() organizerCategory: CreateOrganizerCategoryDto): Promise<OrganizerCategory> {
         return this.organizerCategoryService.update(id, organizerCategory);
     }
 

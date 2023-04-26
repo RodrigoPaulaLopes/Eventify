@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Organizer } from './entities/organizer.entity';
+import { CreateOrganizerDto } from './dto/create-organizer.dto';
 
 @Injectable()
 export class OrganizerService {
@@ -30,7 +31,7 @@ export class OrganizerService {
     }
   }
 
-  async create(organizer: Organizer): Promise<Organizer> {
+  async create(organizer: CreateOrganizerDto): Promise<Organizer> {
     try {
       const newOrganizer = await this.organizerRepository.save(organizer);
       return newOrganizer;
@@ -39,7 +40,7 @@ export class OrganizerService {
     }
   }
 
-  async update(id: number, organizer: Organizer): Promise<Organizer> {
+  async update(id: number, organizer: CreateOrganizerDto): Promise<Organizer> {
     try {
       await this.organizerRepository.update(id, organizer);
       const updatedOrganizer = await this.organizerRepository.findOne({ where: { id: id }, relations: ['organizerCategory'] });
