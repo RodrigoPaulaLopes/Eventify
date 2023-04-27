@@ -1,74 +1,94 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EventCategory } from './entities/event_category.entity';
 import { Repository } from 'typeorm';
 import { CreateEventCategoryDto } from './dto/create-event_category.dto';
+import { User } from 'src/users/entities/users.entity';
 
 @Injectable()
 export class EventCategoryService {
 
     constructor(@InjectRepository(EventCategory)
-    private eventCategoryRepository: Repository<EventCategory>) {
+    private eventCategoryRepository: Repository<EventCategory>,
+        @InjectRepository(User)
+        private userRepository: Repository<User>) {
 
     }
-    async findAll(): Promise<EventCategory[]> {
-        try {
-            const event_categories = await this.eventCategoryRepository.find();
-            if (!event_categories) throw new Error("Categories not found");
+    async findAll(userId: number): Promise<EventCategory[]> {
+        const user = await this.userRepository.findOne({ where: { id: userId } })
 
-            return event_categories
-        } catch (err) {
-            throw new Error(`Error while finding event categories: ${err.message}`);
-        }
+        if (user == null) throw new NotFoundException('user not found')
+
+        if (user.isAdmin != true) throw new BadRequestException('user is not admin')
+
+        const event_categories = await this.eventCategoryRepository.find();
+
+        if (!event_categories) throw new Error("Categories not found");
+
+        return event_categories
+
     }
 
-    async findById(id: number): Promise<EventCategory> {
-        try {
+    async findById(id: number, userId: number): Promise<EventCategory> {
+        const user = await this.userRepository.findOne({ where: { id: userId } })
 
-            const eventCategory = await this.eventCategoryRepository.findOne({ where: { id } });
-            if (!eventCategory) throw new Error(`Event category with id ${id} not found`);
-            return eventCategory;
+        if (user == null) throw new NotFoundException('user not found')
 
-        } catch (err) {
-            throw new Error(`Error while finding event category: ${err.message}`);
-        }
+        if (user.isAdmin != true) throw new BadRequestException('user is not admin')
+
+        const eventCategory = await this.eventCategoryRepository.findOne({ where: { id } });
+        if (!eventCategory) throw new Error(`Event category with id ${id} not found`);
+        return eventCategory;
+
+
     }
 
-    async create(eventCategory: CreateEventCategoryDto): Promise<EventCategory> {
-        try {
-            const eventSaved = await this.eventCategoryRepository.save(eventCategory);
+    async create(eventCategory: CreateEventCategoryDto, userId: number): Promise<EventCategory> {
 
-            return eventSaved
-        } catch (error) {
-            throw new Error(`Error while creating event category: ${error.message}`);
-        }
+        const user = await this.userRepository.findOne({ where: { id: userId } })
+
+        if (user == null) throw new NotFoundException('user not found')
+
+        if (user.isAdmin != true) throw new BadRequestException('user is not admin')
+
+        const eventSaved = await this.eventCategoryRepository.save(eventCategory);
+
+        return eventSaved
+
     }
 
-    async update(id: number, eventCategory: CreateEventCategoryDto): Promise<EventCategory> {
-        try {
-            await this.eventCategoryRepository.update(id, eventCategory);
+    async update(id: number, eventCategory: CreateEventCategoryDto, userId: number): Promise<EventCategory> {
+        const user = await this.userRepository.findOne({ where: { id: userId } })
 
-            const updatedEventCategory = await this.eventCategoryRepository.findOne({ where: { id } });
+        if (user == null) throw new NotFoundException('user not found')
 
-            if (!updatedEventCategory) throw new Error(`Event category with id ${id} not found`);
+        if (user.isAdmin != true) throw new BadRequestException('user is not admin')
 
-            return updatedEventCategory;
-        } catch (err) {
-            throw new Error(`Error while updating event category: ${err.message}`);
-        }
+        await this.eventCategoryRepository.update(id, eventCategory);
+
+        const updatedEventCategory = await this.eventCategoryRepository.findOne({ where: { id } });
+
+        if (!updatedEventCategory) throw new Error(`Event category with id ${id} not found`);
+
+        return updatedEventCategory;
+
     }
 
-    async delete(id: number): Promise<EventCategory> {
-        try {
-            const eventCategory = await this.eventCategoryRepository.findOne({ where: { id } });
+    async delete(id: number, userId: number): Promise<EventCategory> {
 
-            if(!eventCategory) throw new Error(`Event category with id ${id} not found`);
+        const user = await this.userRepository.findOne({ where: { id: userId } })
 
-            const deleted = await this.eventCategoryRepository.remove(eventCategory);
+        if (user == null) throw new NotFoundException('user not found')
 
-            return deleted
-        } catch (err) {
-            throw new Error(`Error while deleting event category: ${err.message}`);
-        }
+        if (user.isAdmin != true) throw new BadRequestException('user is not admin')
+        
+        const eventCategory = await this.eventCategoryRepository.findOne({ where: { id } });
+
+        if (!eventCategory) throw new Error(`Event category with id ${id} not found`);
+
+        const deleted = await this.eventCategoryRepository.remove(eventCategory);
+
+        return deleted
+
     }
 }

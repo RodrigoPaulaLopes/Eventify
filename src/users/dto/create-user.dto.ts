@@ -20,4 +20,7 @@ export class CreateUserDto {
 
     @ApiProperty({ example: 'Rua dos Bobos, 0', description: 'Endereço do usuário' })
     address: string;
+
+    @ApiProperty({ example: 'True ou False', description: 'Identificação para saber se o usuario é admin' })
+    isAdmin: boolean
 }

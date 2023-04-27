@@ -9,16 +9,16 @@ import { CreateOrganizerCategoryDto } from './dto/create-organizer_category.dto'
 export class OrganizerCategoryController {
     constructor(private readonly organizerCategoryService: OrganizerCategoryService) { }
 
-    @Get()
+    @Get(':userId')
     @ApiOperation({ summary: 'Listar todas as categorias de organizadores.' })
     @ApiOkResponse({ description: 'Retorna uma lista com todas as categorias de organizadores cadastradas.'})
     @ApiInternalServerErrorResponse({ description: 'Erro interno no servidor.'})
     @ApiUnauthorizedResponse({description: "precisa de um token de acesso."})
-    findAll(): Promise<OrganizerCategory[]> {
-        return this.organizerCategoryService.findAll();
+    findAll(@Param('userId') userId: number): Promise<OrganizerCategory[]> {
+        return this.organizerCategoryService.findAll(userId);
     }
 
-    @Get(':id')
+    @Get(':id/:userId')
     @ApiOperation({ summary: 'Listar categoria de organizador pelo id.' })
     @ApiOkResponse({ description: 'Retorna uma categoria de organizador pelo seu ID.'})
     @ApiNotFoundResponse({ description: 'Categoria de organizador não encontrada.'})
@@ -29,21 +29,21 @@ export class OrganizerCategoryController {
         type: 'integer',
         description: 'ID da categoria do organizador a ser procurado',
     })
-    findById(@Param('id') id: number): Promise<OrganizerCategory> {
-        return this.organizerCategoryService.findById(id);
+    findById(@Param('id') id: number, @Param('userId') userId: number): Promise<OrganizerCategory> {
+        return this.organizerCategoryService.findById(id, userId);
     }
 
-    @Post()
+    @Post(':userId')
     @ApiOperation({ summary: 'Criar categorias de organizadores.' })
     @ApiCreatedResponse({ description: 'Categoria de organizador criada com sucesso.'})
     @ApiBadRequestResponse({ description: 'Dados inválidos para criar uma categoria de organizador.'})
     @ApiInternalServerErrorResponse({ description: 'Erro interno no servidor.'})
     @ApiUnauthorizedResponse({description: "precisa de um token de acesso."})
-    create(@Body() organizerCategory: CreateOrganizerCategoryDto): Promise<OrganizerCategory> {
-        return this.organizerCategoryService.create(organizerCategory);
+    create(@Body() organizerCategory: CreateOrganizerCategoryDto,  @Param('userId') userId: number): Promise<OrganizerCategory> {
+        return this.organizerCategoryService.create(organizerCategory, userId);
     }
 
-    @Put(':id')
+    @Put(':id/:userId')
     @ApiOperation({ summary: 'Atualizar categorias de organizadores.' })
     @ApiOkResponse({ description: 'Categoria de organizador atualizada com sucesso.'})
     @ApiBadRequestResponse({ description: 'Dados inválidos para atualizar uma categoria de organizador.'})
@@ -55,11 +55,11 @@ export class OrganizerCategoryController {
         type: 'integer',
         description: 'ID da categoria do organizador a ser atualizado',
     })
-    update(@Param('id') id: number, @Body() organizerCategory: CreateOrganizerCategoryDto): Promise<OrganizerCategory> {
-        return this.organizerCategoryService.update(id, organizerCategory);
+    update(@Param('id') id: number, @Body() organizerCategory: CreateOrganizerCategoryDto, @Param('userId') userId: number): Promise<OrganizerCategory> {
+        return this.organizerCategoryService.update(id, organizerCategory, userId);
     }
 
-    @Delete(':id')
+    @Delete(':id/:userId')
     @ApiOperation({ summary: 'remover categoria de organizador.' })
     @ApiOkResponse({ description: 'Categoria de organizador removida com sucesso.'})
     @ApiNotFoundResponse({ description: 'Categoria de organizador não encontrada.'})
@@ -70,7 +70,7 @@ export class OrganizerCategoryController {
         type: 'integer',
         description: 'ID da categoria do organizador a ser deletado',
     })
-    delete(@Param('id') id: number): Promise<OrganizerCategory> {
-        return this.organizerCategoryService.delete(id);
+    delete(@Param('id') id: number, @Param('userId') userId: number): Promise<OrganizerCategory> {
+        return this.organizerCategoryService.delete(id, userId);
     }
 }

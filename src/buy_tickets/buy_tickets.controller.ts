@@ -10,16 +10,16 @@ import { Ticket } from 'src/tickets/entities/tickets.entity';
 export class BuyTicketsController {
     constructor(private readonly buyTicketsService: BuyTicketsService) {}
 
-    @Get()
+    @Get(':userId')
     @ApiOperation({ summary: 'Listar todas as compras de tickets.' })
     @ApiOkResponse({ description: 'Compras de tickets listadas com sucesso.'})
     @ApiInternalServerErrorResponse({ description: 'Erro interno no servidor.'})
     @ApiUnauthorizedResponse({description: "precisa de um token de acesso."})
-    findAll() {
-      return this.buyTicketsService.findAll();
+    findAll(@Param('userId') userId: number) {
+      return this.buyTicketsService.findAll(userId);
     }
   
-    @Get(':id')
+    @Get(':id/:userId')
     @ApiOperation({ summary: 'Listar compras de tickets pelo id.' })
     @ApiNotFoundResponse({ description: 'Compra de ticket não encontrado' })
     @ApiInternalServerErrorResponse({ description: 'Erro interno do servidor' })
@@ -29,10 +29,10 @@ export class BuyTicketsController {
         type: 'integer',
         description: 'ID da compra do ticket a ser procurado',
     })
-    findOne(@Param('id') id: number): Promise<any> {
-      return this.buyTicketsService.findById(id);
+    findOne(@Param('id') id: number, @Param('userId') userId: number): Promise<any> {
+      return this.buyTicketsService.findById(id, userId);
     }
-    @Get('user/:id')
+    @Get('user/:id/:userId')
     @ApiOperation({ summary: 'Listar compras de tickets pelo id do usuario.' })
     @ApiNotFoundResponse({ description: 'Compra de ticket buscado pelo id do usuario não encontrado' })
     @ApiInternalServerErrorResponse({ description: 'Erro interno do servidor' })
@@ -42,10 +42,10 @@ export class BuyTicketsController {
         type: 'integer',
         description: 'ID do usuario a ser procurado',
     })
-    findByUserId(@Param('id') id: number): Promise<any> {
-      return this.buyTicketsService.findByUserId(id);
+    findByUserId(@Param('id') id: number, @Param('userId') userId: number): Promise<any> {
+      return this.buyTicketsService.findByUserId(id, userId);
     }
-    @Get('ticket/:id')
+    @Get('ticket/:id/:userId')
     @ApiOperation({ summary: 'Listar compras de tickets pelo id do ticket.' })
     @ApiNotFoundResponse({ description: 'Compra de ticket buscado pelo id do ticket não encontrado' })
     @ApiInternalServerErrorResponse({ description: 'Erro interno do servidor' })
@@ -55,11 +55,11 @@ export class BuyTicketsController {
         type: 'integer',
         description: 'ID do ticket a ser procurado',
     })
-    findByTicketId(@Param('id') id: number): Promise<any> {
-      return this.buyTicketsService.findByTicketId(id);
+    findByTicketId(@Param('id') id: number, @Param('userId') userId: number): Promise<any> {
+      return this.buyTicketsService.findByTicketId(id, userId);
     }
   
-    @Post()
+    @Post(':userId')
     @ApiOperation({ summary: 'Comprar tickets.' })
     @ApiCreatedResponse({ description: 'O ticket foi comprado com sucesso', type: Ticket })
     @ApiBadRequestResponse({ description: 'Dados inválidos para comprar um tickets.'})
@@ -68,10 +68,10 @@ export class BuyTicketsController {
     @ApiBadRequestResponse({ description: 'numero de tickets para ser comprado deve ser maior que zero.'})
     @ApiInternalServerErrorResponse({ description: 'Erro interno do servidor' })
     @ApiUnauthorizedResponse({description: "precisa de um token de acesso."})
-    buyTickets(@Body() buyTickets: CreateBuyTicketDto) {
-      return this.buyTicketsService.buyTickets(buyTickets);
+    buyTickets(@Body() buyTickets: CreateBuyTicketDto, @Param('userId') userId: number) {
+      return this.buyTicketsService.buyTickets(buyTickets, userId);
     }
-    @Put(':id')
+    @Put(':id/:userId')
     @ApiOperation({ summary: 'Cancelar compra de tickets.' })
     @ApiCreatedResponse({ description: 'A compra do tickets foi cancelada com sucesso', type: Ticket })
     @ApiBadRequestResponse({ description: 'Dados inválidos para cancelar um tickets.'})
@@ -84,8 +84,8 @@ export class BuyTicketsController {
       type: 'integer',
       description: 'ID da compra do ticket a ser procurado',
   })
-    cancelPurchase(@Param('id') id: number): Promise<BuyTickets> {
-        return this.buyTicketsService.cancelPurchase(id);
+    cancelPurchase(@Param('id') id: number, @Param('userId') userId: number): Promise<BuyTickets> {
+        return this.buyTicketsService.cancelPurchase(id, userId);
     }
   
     @Delete(':id')

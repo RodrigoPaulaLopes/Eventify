@@ -9,16 +9,16 @@ import { CreateEventCategoryDto } from './dto/create-event_category.dto';
 export class EventCategoryController {
     constructor(private readonly eventCategoryService: EventCategoryService) {}
 
-    @Get()
+    @Get(':userId')
     @ApiOperation({ summary: 'Listar todas as categorias de eventos.' })
     @ApiOkResponse({ description: 'categorias eventos listadas com sucesso.'})
     @ApiInternalServerErrorResponse({ description: 'Erro interno no servidor.'})
     @ApiUnauthorizedResponse({description: "precisa de um token de acesso."})
-    async findAll(): Promise<EventCategory[]> {
-      return this.eventCategoryService.findAll();
+    async findAll(@Param('userId') userId: number): Promise<EventCategory[]> {
+      return this.eventCategoryService.findAll(userId);
     }
   
-    @Get(':id')
+    @Get(':id/:userId')
     @ApiOperation({ summary: 'Buscar categoria de evento pelo ID.' })
     @ApiOkResponse({ description: 'categoria de evento encontrad com sucesso.'})
     @ApiNotFoundResponse({ description: 'categoria de evento não encontrada.'})
@@ -29,21 +29,21 @@ export class EventCategoryController {
         type: 'integer',
         description: 'ID da categoria de evento a ser buscada',
     })
-    async findOne(@Param('id') id: number): Promise<EventCategory> {
-      return this.eventCategoryService.findById(id);
+    async findOne(@Param('id') id: number, @Param('userId') userId: number): Promise<EventCategory> {
+      return this.eventCategoryService.findById(id, userId);
     }
   
-    @Post()
+    @Post(':userId')
     @ApiOperation({ summary: 'Criar uma nova categoria de evento.' })
     @ApiCreatedResponse({ description: 'categoria de evento criada com sucesso.'})
     @ApiBadRequestResponse({ description: 'Dados inválidos para criar uma categoria de evento.'})
     @ApiInternalServerErrorResponse({ description: 'Erro interno no servidor.'})
     @ApiUnauthorizedResponse({description: "precisa de um token de acesso."})
-    async create(@Body() eventCategory: CreateEventCategoryDto): Promise<EventCategory> {
-      return this.eventCategoryService.create(eventCategory);
+    async create(@Body() eventCategory: CreateEventCategoryDto, @Param('userId') userId: number): Promise<EventCategory> {
+      return this.eventCategoryService.create(eventCategory, userId);
     }
   
-    @Put(':id')
+    @Put(':id/:userId')
     @ApiOperation({ summary: 'Atualizar categoria de evento pelo ID.' })
     @ApiOkResponse({ description: 'categoria de evento atualizado com sucesso.'})
     @ApiBadRequestResponse({ description: 'Dados inválidos para atualizar um categoria de evento.'})
@@ -57,12 +57,13 @@ export class EventCategoryController {
     })
     async update(
       @Param('id') id: number,
+      @Param('userId') userId: number,
       @Body() eventCategory: CreateEventCategoryDto,
     ): Promise<EventCategory> {
-      return this.eventCategoryService.update(id, eventCategory);
+      return this.eventCategoryService.update(id, eventCategory, userId);
     }
   
-    @Delete(':id')
+    @Delete(':id/:userId')
     @ApiOperation({ summary: 'Deletar uma categoria de evento pelo ID.' })
     @ApiOkResponse({ description: 'categoria de evento deletado com sucesso.'})
     @ApiNotFoundResponse({ description: 'categoria de evento não encontrado.'})
@@ -73,7 +74,7 @@ export class EventCategoryController {
         type: 'integer',
         description: 'ID da categoria de evento a ser deletada',
     })
-    async delete(@Param('id') id: number): Promise<EventCategory> {
-      return this.eventCategoryService.delete(id);
+    async delete(@Param('id') id: number, @Param('userId') userId: number): Promise<EventCategory> {
+      return this.eventCategoryService.delete(id, userId);
     }
 }

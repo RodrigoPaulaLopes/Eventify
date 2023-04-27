@@ -1,81 +1,99 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Event } from './entities/event.entity'
 import { Repository } from 'typeorm';
 import { CreateEventDto } from './dto/create-event.dto';
+import { User } from 'src/users/entities/users.entity';
+import { async } from 'rxjs';
 
 @Injectable()
 export class EventService {
 
     constructor(@InjectRepository(Event)
-    private eventRepository: Repository<Event>) { }
+    private eventRepository: Repository<Event>,
+        @InjectRepository(User)
+        private userRepository: Repository<User>) { }
 
-    async findAll(): Promise<Event[]> {
-        try {
-            const events = await this.eventRepository.find({ relations: ['eventCategory'] });
+    async findAll(userId: number): Promise<Event[]> {
+        const user = await this.userRepository.findOne({ where: { id: userId } })
 
-            if(!events){
-                throw new Error('events are empty')
-            }
-            return events
-        } catch (error) {
-            throw new Error(error.message);
-            
+        if (user == null) throw new NotFoundException('user not found')
+
+        if (user.isAdmin != true) throw new BadRequestException('user is not admin')
+        const events = await this.eventRepository.find({ relations: ['eventCategory'] });
+
+        if (!events) {
+            throw new NotFoundException('events are empty')
         }
+        return events
     }
 
-    async findById(id: number): Promise<Event> {
-        
-        try {
-            const event = await this.eventRepository.findOne({ where: { id: id }, relations: ['eventCategory'] } );
+    async findById(id: number, userId: number): Promise<Event> {
 
-            if(!event){
-                throw new Error('events are empty')
-            }
-            return event
-        } catch (error) {
-            throw new Error(error.message);
-            
+        const user = await this.userRepository.findOne({ where: { id: userId } })
+
+        if (!user) throw new NotFoundException('user not found')
+
+        if (user.isAdmin != true) throw new BadRequestException('user is not admin')
+
+        const event = await this.eventRepository.findOne({ where: { id: id }, relations: ['eventCategory'] });
+
+        if (!event) {
+            throw new NotFoundException('events are empty')
         }
+        return event
+
     }
 
-    async create(event: CreateEventDto): Promise<Event> {
+    async create(event: CreateEventDto, userId: number): Promise<Event> {
 
-        try {
-            const eventCreated = await this.eventRepository.save(event);
+        const user = await this.userRepository.findOne({ where: { id: userId } })
 
-            return eventCreated
-            
-        } catch (error) {
-            throw new Error(error.message);
-        }
+        if (user == null) throw new NotFoundException('user not found')
+
+        if (user.isAdmin != true) throw new BadRequestException('user is not admin')
+        const eventCreated = await this.eventRepository.save(event);
+
+        return eventCreated
+
+
     }
 
-    async update(id: number, event: CreateEventDto): Promise<Event> {
+    async update(id: number, event: CreateEventDto, userId: number): Promise<Event> {
 
-        try {
-            const eventUpdated = await this.eventRepository.update(id, event);
-            return this.eventRepository.findOne({ where: { id: id }, relations: ['eventCategory'] } );
-        } catch (error) {
-            throw new Error(error.message);
-        }
-        
+        const user = await this.userRepository.findOne({ where: { id: userId } })
+
+        if (user == null) throw new NotFoundException('user not found')
+
+        if (user.isAdmin != true) throw new BadRequestException('user is not admin')
+
+        const eventUpdated = await this.eventRepository.update(id, event);
+
+        if (eventUpdated.affected == 0) throw new BadRequestException('error in update event')
+
+        return this.eventRepository.findOne({ where: { id: id }, relations: ['eventCategory'] });
+
+
+
+
     }
 
-    async delete(id: number): Promise<Event> {
-        try {
-            const event = await this.eventRepository.findOne({ where: { id: id }, relations: ['eventCategory'] } );
+    async delete(id: number, userId: number): Promise<Event> {
+        const user = await this.userRepository.findOne({ where: { id: userId } })
 
-            if(!event){
-                throw new Error("Event not found");
-                
-            }
-            const eventRemoved = await this.eventRepository.remove(event);
+        if (user == null) throw new NotFoundException('user not found')
 
-            return eventRemoved;
-        } catch (error) {
-            throw new Error(error.message);
+        if (user.isAdmin != true) throw new BadRequestException('user is not admin')
+        const event = await this.eventRepository.findOne({ where: { id: id }, relations: ['eventCategory'] });
+
+        if (!event) {
+            throw new NotFoundException("Event not found");
+
         }
-       
+        const eventRemoved = await this.eventRepository.remove(event);
+
+        return eventRemoved;
+
+
     }
 }

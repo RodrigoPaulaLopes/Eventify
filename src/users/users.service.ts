@@ -14,7 +14,7 @@ export class UsersService {
     private userRepository: Repository<User>,
   ) { }
 
-  async findAll(): Promise<User[]> {
+  async findAll(): Promise<any> {
     const users = await this.userRepository.find();
 
     if (!users) {
@@ -24,7 +24,7 @@ export class UsersService {
     return users;
   }
 
-  async findById(id: number): Promise<User> {
+  async findById(id: number): Promise<any> {
     const user = await this.userRepository.findOne({ where: { id: id } });
 
     if (!user) {
@@ -33,7 +33,7 @@ export class UsersService {
     return user;
   }
 
-  async create(user: User): Promise<User> {
+  async create(user: User): Promise<any> {
     try {
       const password = await hashPassword(user.password)
       const saved = await this.userRepository.save({ ...user, password: password });
@@ -45,7 +45,7 @@ export class UsersService {
 
   }
 
-  async update(id: number, user: User): Promise<User> {
+  async update(id: number, user: User): Promise<any> {
     try {
       const password = await hashPassword(user.password)
       const updated = await this.userRepository.update(id, { ...user, password: password });
@@ -60,7 +60,7 @@ export class UsersService {
 
   }
 
-  async delete(id: number): Promise<User> {
+  async delete(id: number): Promise<any> {
     try {
 
       const user = await this.userRepository.findOne({ where: { id: id } });

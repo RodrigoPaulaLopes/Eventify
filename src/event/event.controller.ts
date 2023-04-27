@@ -10,16 +10,16 @@ export class EventController {
 
     constructor(private readonly eventService: EventService) { }
 
-    @Get()
+    @Get(':userId')
     @ApiOperation({ summary: 'Listar todos os eventos.' })
     @ApiOkResponse({ description: 'eventos listadas com sucesso.'})
     @ApiInternalServerErrorResponse({ description: 'Erro interno no servidor.'})
     @ApiUnauthorizedResponse({description: "precisa de um token de acesso."})
-    findAll(): Promise<Event[]> {
-        return this.eventService.findAll();
+    findAll(@Param('userId') userId: number): Promise<Event[]> {
+        return this.eventService.findAll(userId);
     }
 
-    @Get(':id')
+    @Get(':id/:userId')
     @ApiOperation({ summary: 'Buscar um evento pelo ID.' })
     @ApiOkResponse({ description: 'evento encontrado com sucesso.'})
     @ApiNotFoundResponse({ description: 'evento não encontrada.'})
@@ -30,21 +30,21 @@ export class EventController {
         type: 'integer',
         description: 'ID do evento a ser buscado',
     })
-    findById(@Param('id') id: number): Promise<Event> {
-        return this.eventService.findById(id);
+    findById(@Param('id') id: number, @Param('userId') userId: number): Promise<Event> {
+        return this.eventService.findById(id, userId);
     }
 
-    @Post()
+    @Post(':userId')
     @ApiOperation({ summary: 'Criar um novo evento.' })
     @ApiCreatedResponse({ description: 'evento criado com sucesso.'})
     @ApiBadRequestResponse({ description: 'Dados inválidos para criar um evento.'})
     @ApiInternalServerErrorResponse({ description: 'Erro interno no servidor.'})
     @ApiUnauthorizedResponse({description: "precisa de um token de acesso."})
-    create(@Body() event: CreateEventDto): Promise<Event> {
-        return this.eventService.create(event);
+    create(@Body() event: CreateEventDto, @Param('userId') userId: number): Promise<Event> {
+        return this.eventService.create(event, userId);
     }
 
-    @Put(':id')
+    @Put(':id/:userId')
     @ApiOperation({ summary: 'Atualizar evento pelo ID.' })
     @ApiOkResponse({ description: 'evento atualizado com sucesso.'})
     @ApiBadRequestResponse({ description: 'Dados inválidos para atualizar um evento.'})
@@ -56,11 +56,11 @@ export class EventController {
         type: 'integer',
         description: 'ID do evento a ser atualizado',
     })
-    update(@Param('id') id: number, @Body() event: CreateEventDto): Promise<Event> {
-        return this.eventService.update(id, event);
+    update(@Param('id') id: number, @Body() event: CreateEventDto, @Param('userId') userId: number): Promise<Event> {
+        return this.eventService.update(id, event, userId);
     }
 
-    @Delete(':id')
+    @Delete(':id/:userId')
     @ApiOperation({ summary: 'Deletar um evento pelo ID.' })
     @ApiOkResponse({ description: 'evento deletado com sucesso.'})
     @ApiNotFoundResponse({ description: 'evento não encontrado.'})
@@ -71,7 +71,7 @@ export class EventController {
         type: 'integer',
         description: 'ID do evento a ser deletado',
     })
-    delete(@Param('id') id: number): Promise<Event> {
-        return this.eventService.delete(id);
+    delete(@Param('id') id: number, @Param('userId') userId: number): Promise<Event> {
+        return this.eventService.delete(id, userId);
     }
 }

@@ -5,9 +5,10 @@ import { BuyTicketsService } from './buy_tickets.service';
 import { BuyTicketsController } from './buy_tickets.controller';
 import { TicketsService } from '../tickets/tickets.service';
 import { Ticket } from 'src/tickets/entities/tickets.entity';
+import { User } from 'src/users/entities/users.entity';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([BuyTickets, Ticket])],
+    imports: [TypeOrmModule.forFeature([BuyTickets, Ticket, User])],
     providers: [BuyTicketsService, TicketsService],
     controllers: [BuyTicketsController]
 })

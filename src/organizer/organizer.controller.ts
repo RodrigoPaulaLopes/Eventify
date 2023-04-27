@@ -9,16 +9,16 @@ import { CreateOrganizerDto } from './dto/create-organizer.dto';
 export class OrganizerController {
     constructor(private readonly organizerService: OrganizerService) { }
 
-    @Get()
+    @Get(':userId')
     @ApiOperation({ summary: 'Listar todas os organizadores.' })
     @ApiOkResponse({ description: 'organizadores listadas com sucesso.'})
     @ApiInternalServerErrorResponse({ description: 'Erro interno no servidor.'})
     @ApiUnauthorizedResponse({description: "precisa de um token de acesso."})
-    findAll(): Promise<Organizer[]> {
-        return this.organizerService.findAll();
+    findAll(@Param('userId') userId: number): Promise<Organizer[]> {
+        return this.organizerService.findAll(userId);
     }
 
-    @Get(':id')
+    @Get(':id/:userId')
     @ApiParam({
         name: 'id',
         type: 'integer',
@@ -29,21 +29,21 @@ export class OrganizerController {
     @ApiNotFoundResponse({ description: 'Categoria de organizador não encontrada.'})
     @ApiInternalServerErrorResponse({ description: 'Erro interno no servidor.'})
     @ApiUnauthorizedResponse({description: "precisa de um token de acesso."})
-    findById(@Param('id') id: number): Promise<Organizer> {
-        return this.organizerService.findById(id);
+    findById(@Param('id') id: number, @Param('userId') userId: number): Promise<Organizer> {
+        return this.organizerService.findById(id, userId);
     }
 
-    @Post()
+    @Post(':userId')
     @ApiOperation({ summary: 'Criar um novo organizador.' })
     @ApiCreatedResponse({ description: 'organizador criado com sucesso.'})
     @ApiBadRequestResponse({ description: 'Dados inválidos para criar um organizador.'})
     @ApiInternalServerErrorResponse({ description: 'Erro interno no servidor.'})
     @ApiUnauthorizedResponse({description: "precisa de um token de acesso."})
-    create(@Body() organizer: CreateOrganizerDto): Promise<Organizer> {
-        return this.organizerService.create(organizer);
+    create(@Body() organizer: CreateOrganizerDto,  @Param('userId') userId: number): Promise<Organizer> {
+        return this.organizerService.create(organizer, userId);
     }
 
-    @Put(':id')
+    @Put(':id/:userId')
     @ApiOperation({ summary: 'Atualizar organizador pelo ID.' })
     @ApiOkResponse({ description: 'organizador atualizado com sucesso.'})
     @ApiBadRequestResponse({ description: 'Dados inválidos para atualizar um organizador.'})
@@ -55,11 +55,11 @@ export class OrganizerController {
         type: 'integer',
         description: 'ID do organizador a ser atualizado',
     })
-    update(@Param('id') id: number, @Body() organizer: CreateOrganizerDto): Promise<Organizer> {
-        return this.organizerService.update(id, organizer);
+    update(@Param('id') id: number, @Body() organizer: CreateOrganizerDto, @Param('userId') userId: number): Promise<Organizer> {
+        return this.organizerService.update(id, organizer, userId);
     }
 
-    @Delete(':id')
+    @Delete(':id/:userId')
     @ApiOperation({ summary: 'Deletar um organizador pelo ID.' })
     @ApiOkResponse({ description: 'organizador deletado com sucesso.'})
     @ApiNotFoundResponse({ description: 'organizador não encontrado.'})
@@ -70,7 +70,7 @@ export class OrganizerController {
         type: 'integer',
         description: 'ID do organizador a ser deletado',
     })
-    delete(@Param('id') id: number): Promise<Organizer> {
-        return this.organizerService.delete(id);
+    delete(@Param('id') id: number, @Param('userId') userId: number): Promise<Organizer> {
+        return this.organizerService.delete(id, userId);
     }
 }
