@@ -15,6 +15,11 @@ export class EventController {
     @ApiOkResponse({ description: 'eventos listadas com sucesso.'})
     @ApiInternalServerErrorResponse({ description: 'Erro interno no servidor.'})
     @ApiUnauthorizedResponse({description: "precisa de um token de acesso."})
+    @ApiParam({
+        name: 'userId',
+        type: 'integer',
+        description: 'ID do usuario admin',
+    })
     findAll(@Param('userId') userId: number): Promise<Event[]> {
         return this.eventService.findAll(userId);
     }
@@ -30,6 +35,11 @@ export class EventController {
         type: 'integer',
         description: 'ID do evento a ser buscado',
     })
+    @ApiParam({
+        name: 'userId',
+        type: 'integer',
+        description: 'ID do usuario admin',
+    })
     findById(@Param('id') id: number, @Param('userId') userId: number): Promise<Event> {
         return this.eventService.findById(id, userId);
     }
@@ -40,6 +50,11 @@ export class EventController {
     @ApiBadRequestResponse({ description: 'Dados inválidos para criar um evento.'})
     @ApiInternalServerErrorResponse({ description: 'Erro interno no servidor.'})
     @ApiUnauthorizedResponse({description: "precisa de um token de acesso."})
+    @ApiParam({
+        name: 'userId',
+        type: 'integer',
+        description: 'ID do usuario admin',
+    })
     create(@Body() event: CreateEventDto, @Param('userId') userId: number): Promise<Event> {
         return this.eventService.create(event, userId);
     }
@@ -56,6 +71,11 @@ export class EventController {
         type: 'integer',
         description: 'ID do evento a ser atualizado',
     })
+    @ApiParam({
+        name: 'userId',
+        type: 'integer',
+        description: 'ID do usuario admin',
+    })
     update(@Param('id') id: number, @Body() event: CreateEventDto, @Param('userId') userId: number): Promise<Event> {
         return this.eventService.update(id, event, userId);
     }
@@ -70,6 +90,11 @@ export class EventController {
         name: 'id',
         type: 'integer',
         description: 'ID do evento a ser deletado',
+    })
+    @ApiParam({
+        name: 'userId',
+        type: 'integer',
+        description: 'ID do usuario admin',
     })
     delete(@Param('id') id: number, @Param('userId') userId: number): Promise<Event> {
         return this.eventService.delete(id, userId);

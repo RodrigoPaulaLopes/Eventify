@@ -14,6 +14,11 @@ export class OrganizerController {
     @ApiOkResponse({ description: 'organizadores listadas com sucesso.'})
     @ApiInternalServerErrorResponse({ description: 'Erro interno no servidor.'})
     @ApiUnauthorizedResponse({description: "precisa de um token de acesso."})
+    @ApiParam({
+        name: 'userId',
+        type: 'integer',
+        description: 'ID do usuario admin',
+    })
     findAll(@Param('userId') userId: number): Promise<Organizer[]> {
         return this.organizerService.findAll(userId);
     }
@@ -23,6 +28,11 @@ export class OrganizerController {
         name: 'id',
         type: 'integer',
         description: 'ID do organizador a ser buscado',
+    })
+    @ApiParam({
+        name: 'userId',
+        type: 'integer',
+        description: 'ID do usuario admin',
     })
     @ApiOperation({ summary: 'Buscar uma categoria de organizador pelo ID.' })
     @ApiOkResponse({ description: 'Categoria de organizador encontrado com sucesso.'})
@@ -39,6 +49,11 @@ export class OrganizerController {
     @ApiBadRequestResponse({ description: 'Dados inválidos para criar um organizador.'})
     @ApiInternalServerErrorResponse({ description: 'Erro interno no servidor.'})
     @ApiUnauthorizedResponse({description: "precisa de um token de acesso."})
+    @ApiParam({
+        name: 'userId',
+        type: 'integer',
+        description: 'ID do usuario admin',
+    })
     create(@Body() organizer: CreateOrganizerDto,  @Param('userId') userId: number): Promise<Organizer> {
         return this.organizerService.create(organizer, userId);
     }
@@ -55,6 +70,11 @@ export class OrganizerController {
         type: 'integer',
         description: 'ID do organizador a ser atualizado',
     })
+    @ApiParam({
+        name: 'userId',
+        type: 'integer',
+        description: 'ID do usuario admin',
+    })
     update(@Param('id') id: number, @Body() organizer: CreateOrganizerDto, @Param('userId') userId: number): Promise<Organizer> {
         return this.organizerService.update(id, organizer, userId);
     }
@@ -69,6 +89,11 @@ export class OrganizerController {
         name: 'id',
         type: 'integer',
         description: 'ID do organizador a ser deletado',
+    })
+    @ApiParam({
+        name: 'userId',
+        type: 'integer',
+        description: 'ID do usuario admin',
     })
     delete(@Param('id') id: number, @Param('userId') userId: number): Promise<Organizer> {
         return this.organizerService.delete(id, userId);

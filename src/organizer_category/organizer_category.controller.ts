@@ -14,6 +14,11 @@ export class OrganizerCategoryController {
     @ApiOkResponse({ description: 'Retorna uma lista com todas as categorias de organizadores cadastradas.'})
     @ApiInternalServerErrorResponse({ description: 'Erro interno no servidor.'})
     @ApiUnauthorizedResponse({description: "precisa de um token de acesso."})
+    @ApiParam({
+        name: 'userId',
+        type: 'integer',
+        description: 'ID do usuario admin',
+    })
     findAll(@Param('userId') userId: number): Promise<OrganizerCategory[]> {
         return this.organizerCategoryService.findAll(userId);
     }
@@ -29,6 +34,11 @@ export class OrganizerCategoryController {
         type: 'integer',
         description: 'ID da categoria do organizador a ser procurado',
     })
+    @ApiParam({
+        name: 'userId',
+        type: 'integer',
+        description: 'ID do usuario admin',
+    })
     findById(@Param('id') id: number, @Param('userId') userId: number): Promise<OrganizerCategory> {
         return this.organizerCategoryService.findById(id, userId);
     }
@@ -39,6 +49,11 @@ export class OrganizerCategoryController {
     @ApiBadRequestResponse({ description: 'Dados inválidos para criar uma categoria de organizador.'})
     @ApiInternalServerErrorResponse({ description: 'Erro interno no servidor.'})
     @ApiUnauthorizedResponse({description: "precisa de um token de acesso."})
+    @ApiParam({
+        name: 'userId',
+        type: 'integer',
+        description: 'ID do usuario admin',
+    })
     create(@Body() organizerCategory: CreateOrganizerCategoryDto,  @Param('userId') userId: number): Promise<OrganizerCategory> {
         return this.organizerCategoryService.create(organizerCategory, userId);
     }
@@ -55,6 +70,11 @@ export class OrganizerCategoryController {
         type: 'integer',
         description: 'ID da categoria do organizador a ser atualizado',
     })
+    @ApiParam({
+        name: 'userId',
+        type: 'integer',
+        description: 'ID do usuario admin',
+    })
     update(@Param('id') id: number, @Body() organizerCategory: CreateOrganizerCategoryDto, @Param('userId') userId: number): Promise<OrganizerCategory> {
         return this.organizerCategoryService.update(id, organizerCategory, userId);
     }
@@ -69,6 +89,11 @@ export class OrganizerCategoryController {
         name: 'id',
         type: 'integer',
         description: 'ID da categoria do organizador a ser deletado',
+    })
+    @ApiParam({
+        name: 'userId',
+        type: 'integer',
+        description: 'ID do usuario admin',
     })
     delete(@Param('id') id: number, @Param('userId') userId: number): Promise<OrganizerCategory> {
         return this.organizerCategoryService.delete(id, userId);
